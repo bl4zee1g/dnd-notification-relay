@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Notification Relay</string>
+    <string name="intro">While Do Not Disturb is on, notifications are forwarded to your Discord webhook. Silent notifications and Discord\'s own notifications are skipped.</string>
+    <string name="webhook_title">Discord webhook</string>
+    <string name="webhook_hint">https://discord.com/api/webhooks/…</string>
+    <string name="webhook_helper">Server Settings → Integrations → Webhooks</string>
+    <string name="save_webhook">Save webhook</string>
+    <string name="invalid_webhook">Enter a Discord webhook URL</string>
+    <string name="saved">Webhook saved</string>
+    <string name="access_title">Notification access</string>
+    <string name="access_granted">Notification access is granted. Relaying starts automatically whenever Do Not Disturb is on.</string>
+    <string name="access_missing">Notification access is not granted. Nothing can be read until you allow it.</string>
+    <string name="grant_access">Grant notification access</string>
+    <string name="open_from_settings">Runs in the background. No app drawer icon. Reopen this screen with: adb shell am start -n dev.notificationrelay/.MainActivity</string>
+</resources>
