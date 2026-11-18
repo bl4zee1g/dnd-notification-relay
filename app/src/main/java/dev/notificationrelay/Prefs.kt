@@ -7,6 +7,7 @@ object Prefs {
     private const val FILE = "relay"
     private const val KEY_WEBHOOK = "webhook"
     private const val KEY_EXCLUDED = "excluded"
+    private val DEFAULT_EXCLUDED: Set<String> = setOf("com.discord")
 
     fun webhook(context: Context): String =
         context.getSharedPreferences(FILE, Context.MODE_PRIVATE)
@@ -22,7 +23,7 @@ object Prefs {
 
     fun excludedPackages(context: Context): Set<String> =
         context.getSharedPreferences(FILE, Context.MODE_PRIVATE)
-            .getStringSet(KEY_EXCLUDED, emptySet())
+            .getStringSet(KEY_EXCLUDED, DEFAULT_EXCLUDED)
             .orEmpty()
 
     fun saveExcludedPackages(context: Context, packages: Set<String>) {

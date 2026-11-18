@@ -21,7 +21,6 @@ class RelayListener : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
         if (sbn == null) return
         if (sbn.packageName == packageName) return
-        if (sbn.packageName == DISCORD_PACKAGE) return
         if (sbn.packageName in Prefs.excludedPackages(this)) return
         if (!isDoNotDisturbActive()) return
 
@@ -112,7 +111,6 @@ class RelayListener : NotificationListenerService() {
     }
 
     private companion object {
-        const val DISCORD_PACKAGE = "com.discord"
         const val DEDUPE_WINDOW_MS = 60_000L
     }
 }
