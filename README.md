@@ -1,4 +1,4 @@
-Quickly vibe coded App that lets you set a Discord Webhook URL and checks if your phone is in Do Not Disturb mode. If it is, it's gonna forward all non-silent notifications that aren't from Discord to that Webhook. I made it so it doesn't show in App Drawer, so you need to open it with adb:
+Quickly vibe coded App that lets you set a Discord Webhook URL and checks if your phone is in Do Not Disturb mode. If it is, it's gonna forward all non-silent notifications that aren't on the exclusion list (you can choose which Apps are added to it) to that Webhook. I made it so it doesn't show in App Drawer, so you need to open it with adb:
 
 ```
 adb shell am start -n dev.notificationrelay/.MainActivity
