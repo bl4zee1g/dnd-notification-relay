@@ -22,6 +22,7 @@ class RelayListener : NotificationListenerService() {
         if (sbn == null) return
         if (sbn.packageName == packageName) return
         if (sbn.packageName == DISCORD_PACKAGE) return
+        if (sbn.packageName in Prefs.excludedPackages(this)) return
         if (!isDoNotDisturbActive()) return
 
         val webhook = Prefs.webhook(this)

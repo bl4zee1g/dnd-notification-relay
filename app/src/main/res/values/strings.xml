@@ -12,5 +12,9 @@
     <string name="access_granted">Notification access is granted. Relaying starts automatically whenever Do Not Disturb is on.</string>
     <string name="access_missing">Notification access is not granted. Nothing can be read until you allow it.</string>
     <string name="grant_access">Grant notification access</string>
+    <string name="excluded_title">Excluded apps</string>
+    <string name="excluded_status">%1$d apps excluded from relay</string>
+    <string name="choose_apps">Choose apps</string>
+    <string name="save">Save</string>
     <string name="open_from_settings">Runs in the background. No app drawer icon. Reopen this screen with: adb shell am start -n dev.notificationrelay/.MainActivity</string>
 </resources>
