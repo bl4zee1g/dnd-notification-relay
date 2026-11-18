@@ -2,6 +2,7 @@ package dev.notificationrelay
 
 import android.app.Notification
 import android.app.NotificationManager
+import android.os.SystemClock
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import java.util.concurrent.ExecutorService
@@ -11,10 +12,10 @@ class RelayListener : NotificationListenerService() {
 
     private val executor: ExecutorService = Executors.newSingleThreadExecutor()
 
-    /** Key -> fingerprint of the last payload forwarded for that notification. */
-    private val recentlySent = object : LinkedHashMap<String, Int>(16, 0.75f, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Int>?): Boolean =
-            size > 200
+    /** Fingerprint of (package, title, body) -> time it was last forwarded. */
+    private val recentlySent = object : LinkedHashMap<Int, Long>(16, 0.75f, true) {
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<Int, Long>?): Boolean =
+            size > 500
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification?) {
@@ -39,20 +40,17 @@ class RelayListener : NotificationListenerService() {
         }
         if (title.isEmpty() && body.isEmpty()) return
 
-        // Notification updates often re-post unchanged content; forward only new content.
-        val fingerprint = "$title\u0000$body".hashCode()
+        // Apps like WhatsApp post one message under several keys; dedupe on content, not key.
+        val fingerprint = "${sbn.packageName}\u0000$title\u0000$body".hashCode()
+        val now = SystemClock.elapsedRealtime()
         synchronized(recentlySent) {
-            if (recentlySent[sbn.key] == fingerprint) return
-            recentlySent[sbn.key] = fingerprint
+            val last = recentlySent[fingerprint]
+            if (last != null && now - last < DEDUPE_WINDOW_MS) return
+            recentlySent[fingerprint] = now
         }
 
         val label = appLabel(sbn.packageName)
         executor.execute { DiscordWebhook.send(webhook, label, title, body) }
-    }
-
-    override fun onNotificationRemoved(sbn: StatusBarNotification?) {
-        if (sbn == null) return
-        synchronized(recentlySent) { recentlySent.remove(sbn.key) }
     }
 
     override fun onDestroy() {
@@ -114,5 +112,6 @@ class RelayListener : NotificationListenerService() {
 
     private companion object {
         const val DISCORD_PACKAGE = "com.discord"
+        const val DEDUPE_WINDOW_MS = 60_000L
     }
 }
